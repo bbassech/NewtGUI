@@ -18,6 +18,7 @@ int myColor = color(244,243,103);
 int c1, c2;
 float n, n1;
 int guiScale = 3; //adjusts size of GUI for different resolution screens
+//PShape box; //box to draw on gui
 
 int i = 0;  //This is an incrementing counter that increments everytime something is read from serialEvent
 int mode = 0; //This variable is changed when keys are pressed and used by serialEvent() to check what to do with incoming data
@@ -130,7 +131,7 @@ void setup() {
 //port = new Serial(this, Serial.list()[0], 115200); //USE THIS IF NOT USING PORT SELECT DROPDOWN
   frameCount = 1; //enable use of delay()
 
-  size(400*guiScale,500*guiScale);
+  size(400*guiScale,520*guiScale);
   
   // -------------------
   // GUI
@@ -145,85 +146,98 @@ void setup() {
   
   PFont pfont2 = createFont("Arial",28*guiScale, false);
   ControlFont font2 = new ControlFont(pfont2,13*guiScale);
-  
-  // Text label for heading status
-  t_heading_status = cp5.addTextlabel("heading_status", "", 10*guiScale, 60*guiScale); // 10, 160
+
+//box = createShape(RECT,10*guiScale,240*guiScale, 300*guiScale, 60*guiScale,7*guiScale);
+//box.setFill(myColor);
+//box.setStroke(0xFF0303);  
+
+  // Text label for emulator test
+  t_heading_status = cp5.addTextlabel("heading_status", "", 290*guiScale,260*guiScale); // 10, 160
   t_heading_status.setFont(font);
   
   // Buttons to show status of command being received
   b_heading_left = cp5.addButton("left")
     .setValue(0)
-    .setPosition(240*guiScale, 57*guiScale) // 240, 157
-    .setSize(20*guiScale, 20*guiScale)
+    .setPosition(300*guiScale, 240*guiScale) // 240, 157
+    .setSize(15*guiScale, 15*guiScale)
     .setId(1);
   
   b_heading_stop = cp5.addButton("stop")
     .setValue(0)
-    .setPosition(270*guiScale, 57*guiScale) // 270, 157
-    .setSize(20*guiScale, 20*guiScale)
+    .setPosition(320*guiScale, 240*guiScale) // 270, 157
+    .setSize(15*guiScale, 15*guiScale)
     .setId(2);
   
   b_heading_right = cp5.addButton("right")
     .setValue(0)
-    .setPosition(300*guiScale, 57*guiScale) // 300, 157
-    .setSize(20*guiScale, 20*guiScale)
+    .setPosition(340*guiScale, 240*guiScale) // 300, 157
+    .setSize(15*guiScale, 15*guiScale)
     .setId(3);
   
   // Text label for emulator on/off
-  t_desc_emulator_on = cp5.addTextlabel("desc_emulator_on", "", 10*guiScale, 100*guiScale);
+  t_desc_emulator_on = cp5.addTextlabel("desc_emulator_on", "", 10*guiScale, 240*guiScale);
   
   // Button to start/stop toy controller emulation
- PImage  play_button = loadImage("play_button.png");
- play_button.resize(30*guiScale, 30*guiScale);
-  b_emulator_on = cp5.addButton("emulator_on")
+  PImage  play_button = loadImage("play_button.png");
+  play_button.resize(40*guiScale, 40*guiScale);
+  PImage  pause_button = loadImage("pause_button.png");
+  pause_button.resize(40*guiScale, 40*guiScale);
+ b_emulator_on = cp5.addButton("emulator_on")
     .setValue(0)
-    .setPosition(240*guiScale, 92*guiScale)
+    .setPosition(220*guiScale, 230*guiScale)
     .setImage(play_button)
     .setSize(30*guiScale, 30*guiScale)
+    .setLabelVisible(true)
     .setId(0);
   
   // Text label for control mode
-  t_desc_controlmode = cp5.addTextlabel("desc_controlmode", "",10*guiScale, 140*guiScale).setFont(font);
+  t_desc_controlmode = cp5.addTextlabel("desc_controlmode", "", 10*guiScale, 60*guiScale).setFont(font);
 
   // Button to switch control mode
   b_controlmode = cp5.addButton("controlmode")
   .setValue(0)
-  .setPosition(240*guiScale, 132*guiScale)
+  .setPosition(240*guiScale, 57*guiScale)
   .setSize(80*guiScale, 30*guiScale)
   .setId(0);
   
   // Text label for Thresholds
-  t_desc_thresholds = cp5.addTextlabel("t_desc_thresholds","",10*guiScale,180*guiScale).setFont(font); 
+  t_desc_thresholds = cp5.addTextlabel("t_desc_thresholds","",10*guiScale, 100*guiScale).setFont(font); 
     // Text label for left and right thresholds
-    t_desc_left_thresh = cp5.addTextlabel("t_desc_left_thresh","",20*guiScale, 200*guiScale).setFont(font);
-    t_desc_right_thresh = cp5.addTextlabel("t_desc_right_thresh","",20*guiScale, 230*guiScale).setFont(font);  
-    t_desc_neutral = cp5.addTextlabel("t_desc_neutral","",20*guiScale, 260*guiScale).setFont(font);
+    t_desc_left_thresh = cp5.addTextlabel("t_desc_left_thresh","",20*guiScale, 120*guiScale).setFont(font);
+    t_desc_right_thresh = cp5.addTextlabel("t_desc_right_thresh","",20*guiScale, 150*guiScale).setFont(font);  
+    t_desc_neutral = cp5.addTextlabel("t_desc_neutral","",20*guiScale, 180*guiScale).setFont(font);
   
   // Text input for thresholds
   t_left_thresh = cp5.addTextfield("left_thresh")
-    .setValue(-45)
-    .setPosition(240*guiScale, 200*guiScale)
+    .setValue("-45")
+    .setPosition(240*guiScale, 120*guiScale)
     .setSize(30*guiScale, 20*guiScale)
+    .setColorBackground(#FFFFFF)
+    .setColorValue(0xFF0303)
     .setFont(font);
     t_left_thresh.captionLabel().setVisible(false);
   t_right_thresh = cp5.addTextfield("right_thresh")
-    .setValue(45)
-    .setPosition(240*guiScale, 230*guiScale)
+    .setValue("45")
+    .setPosition(240*guiScale, 150*guiScale)
     .setSize(30*guiScale, 20*guiScale)
+    .setColorBackground(#FFFFFF)
+    .setColorValue(0xFF0303)
     .setFont(font);
     t_right_thresh.captionLabel().setVisible(false);
   t_neutral = cp5.addTextfield("neutral")
-    .setValue(0)
-    .setPosition(240*guiScale, 260*guiScale)
+    .setValue("0")
+    .setPosition(240*guiScale, 180*guiScale)
     .setSize(30*guiScale,20*guiScale)
+    .setColorBackground(#FFFFFF)
+    .setColorValue(0xFF0303)
     .setFont(font);
     t_neutral.captionLabel().setVisible(false);
   
   // Button collection for thresholds  
   b_collect_left = cp5.addButton("collect_left")
     .setValue(0)
-    .setPosition(280*guiScale, 200*guiScale)
-    .setSize(64*guiScale, 20*guiScale)
+    .setPosition(280*guiScale, 120*guiScale)
+    .setSize(54*guiScale, 20*guiScale)
     .setColorBackground(#FFFFFF)
     .setId(0)
     .setLabel("Capture")
@@ -236,8 +250,8 @@ void setup() {
       .align(CENTER,CENTER);
   b_collect_right = cp5.addButton("collect_right")
     .setValue(0)
-    .setPosition(280*guiScale, 230*guiScale)
-    .setSize(64*guiScale, 20*guiScale)
+    .setPosition(280*guiScale, 150*guiScale)
+    .setSize(54*guiScale, 20*guiScale)
     .setColorBackground(#FFFFFF)
     .setId(0)
     .setLabel("Capture")
@@ -251,8 +265,8 @@ void setup() {
       .align(CENTER,CENTER);
   b_collect_neutral = cp5.addButton("collect_neutral")
     .setValue(0)
-    .setPosition(280*guiScale, 260*guiScale)
-    .setSize(64*guiScale,20*guiScale)
+    .setPosition(280*guiScale, 180*guiScale)
+    .setSize(54*guiScale,20*guiScale)
     .setColorBackground(#FFFFFF)
     .setId(0)
     .setLabel("Capture")
@@ -288,7 +302,9 @@ void setup() {
   t_in_x_min = cp5.addTextfield("")
     .setValue(0)
     .setPosition(240*guiScale, 432*guiScale)
-    .setSize(100*guiScale, 30*guiScale);
+    .setSize(100*guiScale, 30*guiScale)
+    .setColorBackground(#FFFFFF)
+    .setColorValue(0xFF0303);
   t_in_x_min.setInputFilter(ControlP5.INTEGER);
   
   // text label for x-max
@@ -298,7 +314,9 @@ void setup() {
   t_in_x_max = cp5.addTextfield(" ")
     .setValue(0)
     .setPosition(240*guiScale, 472*guiScale)
-    .setSize(100*guiScale, 30*guiScale);
+    .setSize(100*guiScale, 30*guiScale)
+    .setColorBackground(#FFFFFF)
+    .setColorValue(0xFF0303);
   t_in_x_max.setInputFilter(ControlP5.INTEGER);
   
   
@@ -321,7 +339,7 @@ void setup() {
   t_port_status.setValue("Not connected");
 
   t_heading_status.setColorValue(0xFF0303);
-  t_heading_status.setValue("Controller heading status: ");
+  t_heading_status.setValue("Emulator Test ");
   
   t_desc_emulator_on.setColorValue(0xFF0303);
   t_desc_emulator_on.setValue("Toggle emulator ON/OFF");
@@ -340,9 +358,9 @@ void setup() {
   t_desc_neutral.setValue("Neutral:");
   
   
-  t_left_thresh.setValue("-45"); //Initiates thresholds to display 45 and -45
-  t_right_thresh.setValue("45");
-  t_neutral.setValue("0"); //Initiates neutral to display 0
+//  t_left_thresh.setValue("-45"); //Initiates thresholds to display 45 and -45
+//  t_right_thresh.setValue("45");
+//  t_neutral.setValue("0"); //Initiates neutral to display 0
   
   t_desc_emulator_type.setColorValue(0xFF0303);
   t_desc_emulator_type.setValue("Toggle emulator Keyboard/Mouse");
@@ -418,6 +436,7 @@ void setup() {
 
 void draw() {
   background(myColor);
+//  shape(box,25,25);
 //  int[] rxheading = {0, 0}; //Defined globally instead
   int heading = 0;
   
@@ -771,11 +790,16 @@ public void controlEvent(ControlEvent theEvent)
 }
 
 /* Function emulator_on */
-public void emulator_on(int theValue)
-{
+public void emulator_on(int theValue)  {
+  PImage  play_button = loadImage("play_button.png");
+  play_button.resize(40*guiScale, 40*guiScale);
+  PImage  pause_button = loadImage("pause_button.png");
+  pause_button.resize(40*guiScale, 40*guiScale);
+  
   emulator_on_toggle = !emulator_on_toggle;
   //println(emulator_on_toggle);
   cp5.controller("emulator_on").setCaptionLabel((emulator_on_toggle == true) ? "ON":"OFF");
+  b_emulator_on.setImage((emulator_on_toggle == true) ? play_button:pause_button);
   //println("on ?:" + emulator_on_toggle);
   if (emulator_on_toggle)  {
     // if the emulator is turned ON, send a keystroke to the serial port in case data has paused...
